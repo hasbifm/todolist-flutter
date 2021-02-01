@@ -54,13 +54,6 @@ class TodoFormWidget extends StatelessWidget {
   Widget buildDesc() {
     return TextFormField(
       initialValue: todoDesc,
-      validator: (title) {
-        if (title.isEmpty) {
-          return "The description can't be empty";
-        } else {
-          return null;
-        }
-      },
       onChanged: onChangedDesc,
       maxLines: 3,
       decoration: InputDecoration(
