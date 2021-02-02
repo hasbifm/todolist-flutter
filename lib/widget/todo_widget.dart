@@ -45,7 +45,14 @@ class TodoWidget extends StatelessWidget {
               value: todo.isDone,
               activeColor: Theme.of(context).primaryColor,
               checkColor: Colors.white,
-              onChanged: (_) {},
+              onChanged: (_) {
+                final provider =
+                    Provider.of<TodosProvider>(context, listen: false);
+                final isDone = provider.toggleTodoStatus(todo);
+
+                Utils.showSnackbar(context,
+                    isDone ? "Task Completed" : "Task marked incomplete");
+              },
             ),
             SizedBox(width: 10),
             Expanded(
