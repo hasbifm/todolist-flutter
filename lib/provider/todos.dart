@@ -27,4 +27,10 @@ class TodosProvider extends ChangeNotifier {
     notifyListeners();
     return todo.isDone;
   }
+
+  void updateTodo(Todo todo, String title, String desc) {
+    todo.todoTitle = title;
+    todo.todoDesc = desc;
+    notifyListeners();
+  }
 }
