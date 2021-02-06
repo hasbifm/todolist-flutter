@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todolist/bloc/todo_bloc.dart';
 import 'package:todolist/model/todo.dart';
-import 'package:todolist/provider/todos.dart';
 import 'package:todolist/widget/todo_form_widget.dart';
 
 class AddTodoDialog extends StatefulWidget {
@@ -27,18 +27,18 @@ class _AddTodoDialogState extends State<AddTodoDialog> {
                   setState(() => this.todoTitle = inputTitle),
               onChangedDesc: (inputDesc) =>
                   setState(() => this.todoDesc = inputDesc),
-              onSavedTodo: addTodo,
+              onSavedTodo: () => addTodo(context),
               oncancel: () {
                 Navigator.of(context).pop();
               },
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  void addTodo() {
+  void addTodo(context) {
     final isValid = _formKey.currentState.validate();
     if (!isValid) {
       return;
@@ -48,9 +48,7 @@ class _AddTodoDialogState extends State<AddTodoDialog> {
         todoTitle: todoTitle,
         todoDesc: todoDesc,
       );
-
-      final provider = Provider.of<TodosProvider>(context, listen: false);
-      provider.addTodo(todo);
+      BlocProvider.of<TodoBloc>(context).add(EventAddTodo(todo));
       Navigator.of(context).pop();
     }
   }

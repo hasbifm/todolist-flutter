@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todolist/bloc/todo_bloc.dart';
 import 'package:todolist/widget/add_todo_dialog.dart';
 import 'package:todolist/widget/completed_list_widget.dart';
 import 'package:todolist/widget/todolist_widget.dart';
@@ -25,7 +27,8 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
+      body: BlocProvider.value(
+        value: BlocProvider.of<TodoBloc>(context),
         child: tabs[selectedIndex],
       ),
       floatingActionButton: FloatingActionButton(

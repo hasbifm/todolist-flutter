@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
+import 'package:todolist/bloc/todo_bloc.dart';
 import 'package:todolist/model/todo.dart';
 import 'package:todolist/page/edit_todo_page.dart';
-import 'package:todolist/provider/todos.dart';
 import 'package:todolist/utils.dart';
 
 class TodoWidget extends StatelessWidget {
@@ -32,7 +33,8 @@ class TodoWidget extends StatelessWidget {
             IconSlideAction(
               color: Colors.redAccent,
               onTap: () => {
-                deleteTodo(context, todo),
+                BlocProvider.of<TodoBloc>(context).add(EventDeleteTodo(todo))
+                // deleteTodo(context, todo),
               },
               caption: "Delete",
               icon: Icons.delete,
@@ -55,12 +57,8 @@ class TodoWidget extends StatelessWidget {
               activeColor: Theme.of(context).primaryColor,
               checkColor: Colors.white,
               onChanged: (_) {
-                final provider =
-                    Provider.of<TodosProvider>(context, listen: false);
-                final isDone = provider.toggleTodoStatus(todo);
-
-                Utils.showSnackbar(context,
-                    isDone ? "Task Completed" : "Task marked incomplete");
+                BlocProvider.of<TodoBloc>(context)
+                    .add(EventToogleComplete(todo));
               },
             ),
             SizedBox(width: 10),
@@ -96,8 +94,7 @@ class TodoWidget extends StatelessWidget {
   }
 
   deleteTodo(BuildContext context, Todo todo) {
-    final provider = Provider.of<TodosProvider>(context, listen: false);
-    provider.removeTodo(todo);
+    context.read<TodoBloc>().add(EventAddTodo(todo));
 
     Utils.showSnackbar(context, "Deleted the task");
   }
