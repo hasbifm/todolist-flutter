@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todolist/api/firebase_api.dart';
 import 'package:todolist/bloc/todo_bloc.dart';
+import 'package:todolist/model/todo.dart';
 import 'package:todolist/widget/add_todo_dialog.dart';
 import 'package:todolist/widget/completed_list_widget.dart';
 import 'package:todolist/widget/todolist_widget.dart';
@@ -16,6 +18,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     final tabs = [
@@ -27,9 +30,24 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: BlocProvider.value(
-        value: BlocProvider.of<TodoBloc>(context),
-        child: tabs[selectedIndex],
+      body: StreamBuilder<List<Todo>>(
+        stream: FirebaseAPI.readTodos(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            default:
+              if (snapshot.hasError) {
+                return Text("Something Went Error Try Later");
+              } else {
+                final todos = snapshot.data;
+                BlocProvider.of<TodoBloc>(context).add(EventSetTodos(todos));
+                return tabs[selectedIndex];
+              }
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showDialog(

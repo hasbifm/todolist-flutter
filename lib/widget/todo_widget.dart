@@ -19,22 +19,21 @@ class TodoWidget extends StatelessWidget {
           actionPane: SlidableDrawerActionPane(),
           actionExtentRatio: 0.2,
           key: Key(todo.todoId),
-          actions: [
-            IconSlideAction(
-              color: Colors.greenAccent,
-              onTap: () => {
-                editTodo(context, todo),
-              },
-              caption: "Edit",
-              icon: Icons.edit,
-            )
-          ],
+          // actions: [
+          //   IconSlideAction(
+          //     color: Colors.greenAccent,
+          //     onTap: () => {
+          //       editTodo(context, todo),
+          //     },
+          //     caption: "Edit",
+          //     icon: Icons.edit,
+          //   )
+          // ],
           secondaryActions: [
             IconSlideAction(
               color: Colors.redAccent,
               onTap: () => {
-                BlocProvider.of<TodoBloc>(context).add(EventDeleteTodo(todo))
-                // deleteTodo(context, todo),
+                deleteTodo(context, todo),
               },
               caption: "Delete",
               icon: Icons.delete,
@@ -58,7 +57,7 @@ class TodoWidget extends StatelessWidget {
               checkColor: Colors.white,
               onChanged: (_) {
                 BlocProvider.of<TodoBloc>(context)
-                    .add(EventToogleComplete(todo));
+                    .add(EventToogleComplete(todo, context));
               },
             ),
             SizedBox(width: 10),
@@ -94,9 +93,8 @@ class TodoWidget extends StatelessWidget {
   }
 
   deleteTodo(BuildContext context, Todo todo) {
-    context.read<TodoBloc>().add(EventAddTodo(todo));
-
-    Utils.showSnackbar(context, "Deleted the task");
+    BlocProvider.of<TodoBloc>(context).add(EventDeleteTodo(todo));
+    Utils.showSnackbar(context, "Todo Deleted");
   }
 
   editTodo(BuildContext context, Todo todo) {

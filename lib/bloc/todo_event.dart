@@ -29,8 +29,18 @@ class EventEditTodo extends TodoEvent {
 
 class EventToogleComplete extends TodoEvent {
   final Todo todo;
+  final BuildContext context;
 
-  EventToogleComplete(this.todo);
+  EventToogleComplete(
+    this.todo,
+    this.context,
+  );
+}
+
+class EventSetTodos extends TodoEvent {
+  final List<Todo> todos;
+
+  EventSetTodos(this.todos);
 }
 
 class EventShowTodo implements TodoEvent {

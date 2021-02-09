@@ -31,6 +31,8 @@ dependencies:
   flutter_bloc:
   equatable:
   flutter_slidable:
+  firebase_core:
+  cloud_firestore:
 
 dev_dependencies:
   flutter_test:

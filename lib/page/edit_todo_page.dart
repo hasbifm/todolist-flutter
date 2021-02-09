@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todolist/bloc/todo_bloc.dart';
 import 'package:todolist/model/todo.dart';
+import 'package:todolist/utils.dart';
 import 'package:todolist/widget/todo_form_widget.dart';
 
 class EditTodoPage extends StatefulWidget {
@@ -35,13 +36,15 @@ class _EditTodoPageState extends State<EditTodoPage> {
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: () {
+              BlocProvider.of<TodoBloc>(context)
+                  .add(EventDeleteTodo(widget.todo));
               Navigator.of(context).pop();
             },
           )
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(32.0),
         child: Form(
           key: _formkey,
           child: TodoFormWidget(
@@ -66,6 +69,7 @@ class _EditTodoPageState extends State<EditTodoPage> {
       BlocProvider.of<TodoBloc>(context)
           .add(EventEditTodo(widget.todo, title, desc));
       Navigator.of(context).pop();
+      Utils.showSnackbar(context, "Todo Edited");
     }
   }
 }
